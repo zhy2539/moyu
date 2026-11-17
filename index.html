@@ -25,6 +25,9 @@ button{font:inherit;cursor:pointer}
 a{color:var(--accent)}
 .wrap{max-width:920px;margin:0 auto;padding:8px 20px 96px}
 #draw,#library,#combo,#games{scroll-margin-top:28px}
+/* Page views: one nav item = one view, only the active one shows */
+.page-view[hidden]{display:none}
+.page-view > h2.sec:first-child{margin-top:10px;padding-top:0;border-top:none}
 /* Sidebar nav */
 body{padding-left:212px}
 .sidenav{position:fixed;left:0;top:0;bottom:0;width:212px;z-index:50;background:var(--bg);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:30px 18px;gap:4px}
@@ -140,6 +143,12 @@ h2.sec{font-family:"Noto Serif SC",serif;font-size:23px;font-weight:700;margin:6
 .g2048-cell{aspect-ratio:1;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;color:var(--ink)}
 .g2048-cell.v2{background:#e6efe7}.g2048-cell.v4{background:#cfe3d3}.g2048-cell.v8{background:#f2b879;color:#fff}.g2048-cell.v16{background:#f08a4b;color:#fff}.g2048-cell.v32{background:#e85d3f;color:#fff}.g2048-cell.v64{background:#d6452a;color:#fff}.g2048-cell.v128{background:#e9c46a;color:#3a2e00;font-size:19px}.g2048-cell.v256{background:#e9b949;color:#3a2e00;font-size:19px}.g2048-cell.v512{background:#2a9d8f;color:#fff;font-size:19px}.g2048-cell.v1024{background:#0f766e;color:#fff;font-size:16px}.g2048-cell.v2048{background:#111827;color:#fbbf24;font-size:16px}
 @media (prefers-color-scheme: dark){.g2048-cell.v2{background:#243329}.g2048-cell.v4{background:#2f4a38}}
+/* platformer */
+.pf-controls{display:flex;gap:10px;justify-content:space-between;max-width:480px;margin:2px auto 0;width:100%}
+.pf-controls .pf-group{display:flex;gap:10px}
+.pf-btn{border:1.5px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;font-size:19px;font-weight:800;min-width:64px;min-height:56px;padding:0 18px;touch-action:none;user-select:none;-webkit-user-select:none}
+.pf-btn:active,.pf-btn.held{background:var(--accent);color:var(--accent-ink)}
+.pf-btn.jump{min-width:84px;background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 /* boss mode */
 #bossBtn{position:fixed;right:16px;bottom:16px;z-index:60;background:var(--coral);color:#fff;border:0;border-radius:999px;padding:14px 22px;font-weight:700;font-size:15px;box-shadow:0 6px 18px rgba(0,0,0,.16);min-height:52px}
 #bossView{display:none;position:fixed;inset:0;z-index:100;background:#f3f4f6;color:#111827;overflow:auto;padding:24px 16px 60px;font-family:Arial,sans-serif}
@@ -161,7 +170,7 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 </head>
 <body>
 <nav class="sidenav" aria-label="页面导航">
-<p class="nav-label">本页目录</p>
+<p class="nav-label">导航</p>
 <a href="#draw" data-nav="draw">随便抽</a>
 <a href="#library" data-nav="library">点子库</a>
 <a href="#combo" data-nav="combo">今日套餐</a>
@@ -169,12 +178,13 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 </nav>
 <div class="wrap">
 
+<div class="page-view" data-page="draw">
 <header class="hero">
 <h1>上班摸鱼，<em>可以做的那些事</em></h1>
-<p>工作间隙的 5 分钟、午休的半小时、等会议开始的空档——不用刷到无聊。这里收了 36 个按场景分类的点子，和 8 个打开就能玩的小游戏，挑一个，喘口气再回去干活。</p>
+<p>工作间隙的 5 分钟、午休的半小时、等会议开始的空档——不用刷到无聊。这里收了 36 个按场景分类的点子，和 9 个打开就能玩的小游戏，挑一个，喘口气再回去干活。</p>
 <div class="hero-meta">
 <span>🐟 36 个点子 · 6 大分类</span>
-<span>🎮 8 个小游戏 · 打开就玩</span>
+<span>🎮 9 个小游戏 · 打开就玩</span>
 <span>🚨 带「老板键」· 一键切回工作界面</span>
 </div>
 </header>
@@ -191,8 +201,10 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 <span class="draw-tags" id="drawTags"></span>
 </div>
 </section>
+</div>
 
 <!-- Idea library -->
+<div class="page-view" data-page="library" hidden>
 <h2 class="sec" id="library">点子库</h2>
 <p class="sec-sub">按分类逛，或者用时长和隐蔽度筛。看到喜欢的点「收藏」，本次打开期间会留在收藏夹里，方便攒一份自己的清单发给朋友对着玩。</p>
 
@@ -215,14 +227,18 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 </div>
 
 <div class="grid" id="ideaGrid"></div>
-<div class="empty" id="ideaEmpty" hidden>这个组合下没有点子，换个筛选试试，或者点上面「随便来一个」。</div>
+<div class="empty" id="ideaEmpty" hidden>这个组合下没有点子，换个筛选试试，或者去「随便抽」页点「随便来一个」。</div>
+</div>
 
 <!-- Daily combo -->
+<div class="page-view" data-page="combo" hidden>
 <h2 class="sec" id="combo">今日摸鱼套餐</h2>
 <p class="sec-sub">一整天怎么安排？给你配好了一套节奏，点任意一步就跳到对应点子。</p>
 <div class="combo" id="comboGrid"></div>
+</div>
 
 <!-- Games -->
+<div class="page-view" data-page="games" hidden>
 <h2 class="sec" id="games">摸鱼小游戏</h2>
 <p class="sec-sub">不用下载、不用注册，点开就玩，随时能停。成绩只记在本次打开里，刷新就清零——正好，不留痕迹。</p>
 
@@ -235,6 +251,7 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 <button class="chip-btn" data-game="tetris">🧱 俄罗斯方块</button>
 <button class="chip-btn" data-game="g2048">🔢 2048</button>
 <button class="chip-btn" data-game="breakout">🧱 打砖块</button>
+<button class="chip-btn" data-game="platform">🐟 摸鱼大冒险</button>
 </div>
 
 <div class="game-panel" id="panel-react">
@@ -385,6 +402,31 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 <p class="how" id="brMsg">点「开始」发球，手忙脚乱但很解压。</p>
 </div>
 
+<div class="game-panel" id="panel-platform" hidden>
+<h3>🐟 摸鱼大冒险</h3>
+<p class="how">横版平台跳跃：你是一条溜出工位的小鱼，一路向右跑，收集金币和咖啡，踩扁巡逻的老板，躲开缺口，最后摸到终点的下班旗就算赢。电脑用 ← → 或 A / D 移动、空格 / ↑ / W 跳跃（连按两下空格还能二段跳）；手机用下方按钮。踩到老板侧面或掉进坑里扣一条命，3 条命用完结束。</p>
+<div class="canvas-wrap">
+<canvas id="pfCanvas" class="game-canvas" width="480" height="270" aria-label="摸鱼大冒险画布" style="background:#7cc4de"></canvas>
+<div class="pf-controls" aria-label="摸鱼大冒险触控按钮">
+<div class="pf-group">
+<button class="pf-btn" data-pf="left" aria-label="向左">←</button>
+<button class="pf-btn" data-pf="right" aria-label="向右">→</button>
+</div>
+<button class="pf-btn jump" data-pf="jump" aria-label="跳跃">跳 ↑</button>
+</div>
+</div>
+<div class="stat-row">
+<span>得分 <b id="pfScore">0</b></span>
+<span>收集 <b id="pfCoins">0</b></span>
+<span>命 <b id="pfLives">3</b></span>
+<span>最佳 <b id="pfBest">0</b></span>
+<button class="btn btn-accent" id="pfStart">开始 / 重开</button>
+<button class="btn btn-ghost" id="pfPause">暂停</button>
+</div>
+<p class="how" id="pfMsg">点「开始」出发，一路向右，旗子在最右边等你下班。</p>
+</div>
+</div>
+
 <footer>摸鱼有度，活儿别耽误。喘口气是为了更好地干活 🐟</footer>
 </div>
 
@@ -434,7 +476,7 @@ var IDEAS=[
 {id:15,cat:"桌面乐趣",title:"给文件起一批有趣的名字",desc:"把「新建文件夹(7)」改成正经名字，顺手建一个「快乐源泉」文件夹存好玩的东西。",min:10,stealth:5},
 {id:16,cat:"桌面乐趣",title:"试一个没用过的快捷键",desc:"比如 Win+V 打开剪贴板历史、Ctrl+Shift+T 恢复刚关的网页。学会一个，效率白捡。",min:5,stealth:5},
 {id:17,cat:"桌面乐趣",title:"看一个 5 分钟的解压视频",desc:"修马蹄、洗地毯、切肥皂——这类视频有种奇怪的治愈感，看一个就停，别连环刷。",min:5,stealth:2},
-{id:18,cat:"桌面乐趣",title:"玩一局本页的摸鱼小游戏",desc:"往下翻，反应力、翻牌、抓小鱼、扫雷、贪吃蛇、俄罗斯方块、2048、打砖块任选一个，一局也就一两分钟。",min:5,stealth:2,link:"#games"},
+{id:18,cat:"桌面乐趣",title:"玩一局本页的摸鱼小游戏",desc:"去「小游戏」页，反应力、翻牌、抓小鱼、扫雷、贪吃蛇、俄罗斯方块、2048、打砖块、摸鱼大冒险任选一个，一局也就一两分钟。",min:5,stealth:2,link:"#games"},
 {id:19,cat:"轻社交",title:"给老朋友发一句「最近咋样」",desc:"不用长篇大论，一句话就能续上联系。对方回了，今天就多了一段聊天。",min:5,stealth:4},
 {id:20,cat:"轻社交",title:"在群里发一个今日份表情包",desc:"挑个应景的表情包活跃一下气氛，你就是今天群里的快乐源泉。",min:3,stealth:3},
 {id:21,cat:"轻社交",title:"约同事下午拼一杯咖啡",desc:"借买咖啡的名义一起下楼走走，八卦和消息都是在这种时候交换的。",min:15,stealth:5},
@@ -492,7 +534,7 @@ if(state.favs[it.id]){delete state.favs[it.id];toast("已取消收藏")}else{sta
 render();
 });
 var go=card.querySelector(".go-btn");
-if(go)go.addEventListener("click",function(){document.getElementById("games").scrollIntoView({behavior:"smooth"})});
+if(go)go.addEventListener("click",function(){if(location.hash==="#games"){showPage("games")}else{location.hash="games"}});
 var cp=card.querySelector(".copy-btn");
 if(cp)cp.addEventListener("click",function(){
 var text=""+it.title+"——"+it.desc+"（约"+it.min+"分钟）";
@@ -540,7 +582,7 @@ comboWrap.appendChild(d);
 });
 
 /* ---- Game tabs ---- */
-var GAME_IDS=["react","memory","whack","mine","snake","tetris","g2048","breakout"];
+var GAME_IDS=["react","memory","whack","mine","snake","tetris","g2048","breakout","platform"];
 var activeGame="react";
 document.querySelectorAll("[data-game]").forEach(function(b){
 b.addEventListener("click",function(){
@@ -551,6 +593,7 @@ GAME_IDS.forEach(function(g){$("panel-"+g).hidden=g!==activeGame});
 if(activeGame!=="snake"&&typeof snakePauseRun==="function")snakePauseRun();
 if(activeGame!=="tetris"&&typeof tetPauseRun==="function")tetPauseRun();
 if(activeGame!=="breakout"&&typeof brPauseRun==="function")brPauseRun();
+if(activeGame!=="platform"&&typeof pfPauseRun==="function")pfPauseRun();
 });
 });
 
@@ -941,6 +984,184 @@ document.querySelectorAll("[data-br]").forEach(function(b){ b.addEventListener("
 (function(){ var cv=$("brCanvas"); function moveTo(clientX){ var r=cv.getBoundingClientRect(); brPaddle=Math.max(36,Math.min(324,(clientX-r.left)*(360/r.width))); if(!brRunning)brDraw(); } cv.addEventListener("mousemove",function(e){moveTo(e.clientX)}); cv.addEventListener("touchstart",function(e){moveTo(e.touches[0].clientX);e.preventDefault()},{passive:false}); cv.addEventListener("touchmove",function(e){moveTo(e.touches[0].clientX);e.preventDefault()},{passive:false}); })();
 brBuildBricks(); brDraw();
 
+/* ---- Platformer: 摸鱼大冒险 ---- */
+var pfCtx=$("pfCanvas").getContext("2d");
+var PF_W=480, PF_H=270, PF_WORLD=2560, PF_GRAV=0.62;
+var pfPlatforms=[], pfItems=[], pfEnemies=[], pfPlayer=null, pfCam=0;
+var pfScoreV=0, pfCoinsV=0, pfLivesV=3, pfBestV=0, pfRunning=false, pfPaused=false, pfOver=false, pfRaf=null, pfTick=0;
+var pfKeys={left:false,right:false};
+var pfGoalX=2480;
+function pfBuildLevel(){
+pfPlatforms=[
+{x:0,y:230,w:480,h:40,ground:true},{x:540,y:230,w:360,h:40,ground:true},
+{x:960,y:230,w:420,h:40,ground:true},{x:1440,y:230,w:380,h:40,ground:true},
+{x:1880,y:230,w:680,h:40,ground:true},
+{x:180,y:172,w:96,h:14},{x:340,y:122,w:96,h:14},
+{x:600,y:162,w:96,h:14},{x:762,y:112,w:96,h:14},
+{x:1020,y:167,w:96,h:14},{x:1180,y:117,w:96,h:14},
+{x:1480,y:162,w:96,h:14},{x:1642,y:112,w:96,h:14},
+{x:1940,y:167,w:96,h:14},{x:2102,y:117,w:96,h:14},
+{x:2264,y:167,w:96,h:14},
+{x:2388,y:202,w:34,h:28},{x:2422,y:174,w:34,h:56}
+];
+pfItems=[];
+[[120,204,"coin"],[228,140,"coin"],[388,90,"coffee"],[640,204,"coin"],[810,80,"coin"],
+[700,130,"coin"],[1068,135,"coin"],[1228,85,"coffee"],[1120,204,"coin"],[1528,130,"coin"],
+[1690,80,"coin"],[1600,204,"coin"],[1988,135,"coin"],[2150,85,"coffee"],[2312,135,"coin"],
+[2050,204,"coin"],[300,204,"coin"],[1300,204,"coin"],[900,204,"coin"]].forEach(function(d){
+pfItems.push({x:d[0],y:d[1],type:d[2],taken:false,ph:Math.random()*6.28});
+});
+pfEnemies=[
+{x:660,min:580,max:850,dir:1,sp:0.85,alive:true},
+{x:1120,min:985,max:1330,dir:-1,sp:0.95,alive:true},
+{x:1560,min:1470,max:1760,dir:1,sp:1.05,alive:true},
+{x:2080,min:1920,max:2400,dir:-1,sp:1.1,alive:true}
+].map(function(e){e.y=198;e.w=26;e.h=32;return e});
+}
+function pfResetPlayer(){ pfPlayer={x:40,y:198,w:24,h:32,vx:0,vy:0,face:1,ground:false,jumps:0,inv:0}; pfCam=0; }
+function pfOverlap(a,b){ return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y; }
+function pfHud(){ $("pfScore").textContent=pfScoreV; $("pfCoins").textContent=pfCoinsV; $("pfLives").textContent=pfLivesV; }
+function pfFinishBest(){ if(pfScoreV>pfBestV){pfBestV=pfScoreV;$("pfBest").textContent=pfBestV} }
+function pfHurt(reason){
+if(pfPlayer.inv>0)return;
+pfLivesV--; pfHud(); pfFinishBest();
+if(pfLivesV<=0){ pfRunning=false; pfOver=true; $("pfMsg").textContent=reason+"命用完了，这趟摸鱼得分 "+pfScoreV+"，点「开始 / 重开」再溜一次。"; pfDraw(); return; }
+$("pfMsg").textContent=reason+"还剩 "+pfLivesV+" 条命，从头再跑一段。";
+pfResetPlayer();
+}
+function pfJump(){
+if(!pfRunning||pfPaused||pfOver)return;
+if(pfPlayer.ground){ pfPlayer.vy=-12.2; pfPlayer.ground=false; pfPlayer.jumps=1; }
+else if(pfPlayer.jumps<2){ pfPlayer.vy=-11; pfPlayer.jumps=2; }
+}
+function pfStep(){
+var p=pfPlayer; pfTick++;
+p.vx=0;
+if(pfKeys.left){p.vx=-3.3;p.face=-1}
+if(pfKeys.right){p.vx=3.3;p.face=1}
+p.vy=Math.min(p.vy+PF_GRAV,15);
+/* horizontal */
+p.x+=p.vx;
+pfPlatforms.forEach(function(pl){
+if(!pfOverlap(p,pl))return;
+if(p.vx>0)p.x=pl.x-p.w; else if(p.vx<0)p.x=pl.x+pl.w;
+});
+if(p.x<0)p.x=0; if(p.x>PF_WORLD-p.w)p.x=PF_WORLD-p.w;
+/* vertical */
+p.y+=p.vy; p.ground=false;
+pfPlatforms.forEach(function(pl){
+if(!pfOverlap(p,pl))return;
+if(p.vy>0){p.y=pl.y-p.h;p.vy=0;p.ground=true;p.jumps=0}
+else if(p.vy<0){p.y=pl.y+pl.h;p.vy=0}
+});
+if(p.inv>0)p.inv--;
+/* items */
+pfItems.forEach(function(it){
+if(it.taken)return;
+var box={x:it.x-11,y:it.y-11,w:22,h:22};
+if(pfOverlap(p,box)){ it.taken=true; pfCoinsV++; pfScoreV+= it.type==="coffee"?150:100; pfHud(); }
+});
+/* enemies */
+pfEnemies.forEach(function(e){
+if(!e.alive)return;
+e.x+=e.dir*e.sp;
+if(e.x<e.min){e.x=e.min;e.dir=1} if(e.x>e.max){e.x=e.max;e.dir=-1}
+if(pfOverlap(p,e)){
+var stomp=p.vy>0&&(p.y+p.h)-e.y<16;
+if(stomp){ e.alive=false; p.vy=-8.5; p.ground=false; pfScoreV+=200; pfHud(); toast("踩扁一个老板！+200"); }
+else pfHurt("被巡逻的老板抓个正着！");
+}
+});
+/* goal */
+if(p.x+p.w>=pfGoalX&&p.x<pfGoalX+16){
+pfScoreV+=500+pfLivesV*100; pfHud(); pfFinishBest();
+pfRunning=false; pfOver=true;
+$("pfMsg").textContent="🎉 摸到下班旗了！得分 "+pfScoreV+"（含剩余命奖励），今天这鱼摸得圆满。点「开始 / 重开」再来一趟。";
+toast("下班！摸鱼大冒险通关 🎉");
+pfDraw(); return;
+}
+/* fall */
+if(p.y>PF_H+60){ pfHurt("掉进坑里啦！"); }
+pfCam=Math.max(0,Math.min(PF_WORLD-PF_W, p.x+p.w/2-PF_W/2));
+}
+function pfDraw(){
+var c=pfCtx;
+/* sky */
+var grad=c.createLinearGradient(0,0,0,PF_H); grad.addColorStop(0,"#8fd0e8"); grad.addColorStop(1,"#d8f0e2");
+c.fillStyle=grad; c.fillRect(0,0,PF_W,PF_H);
+/* clouds (parallax) */
+c.fillStyle="rgba(255,255,255,.85)";
+[60,300,560,900,1300,1750,2150].forEach(function(cx){
+var sx=cx-pfCam*0.4; sx=((sx%(PF_WORLD))+PF_WORLD)%(PF_W+160)-80;
+c.beginPath(); c.ellipse(sx,42+(cx%3)*14,30,11,0,0,Math.PI*2); c.ellipse(sx+22,46+(cx%3)*14,20,8,0,0,Math.PI*2); c.fill();
+});
+/* distant desks/buildings */
+c.fillStyle="rgba(15,118,110,.14)";
+for(var bx=0;bx<PF_W;bx+=64){ var bh=40+((bx+Math.floor(pfCam*0.5))%3)*16; c.fillRect(bx,230-bh,44,bh); }
+/* platforms */
+pfPlatforms.forEach(function(pl){
+var sx=pl.x-pfCam; if(sx+pl.w<0||sx>PF_W)return;
+if(pl.ground){ c.fillStyle="#8a5a33"; c.fillRect(sx,pl.y,pl.w,pl.h); c.fillStyle="#2f9e6e"; c.fillRect(sx,pl.y,pl.w,9); }
+else { c.fillStyle="#c98d4b"; c.fillRect(sx,pl.y,pl.w,pl.h); c.fillStyle="#a06a2c"; c.fillRect(sx,pl.y+pl.h-4,pl.w,4); c.fillRect(sx+8,pl.y+pl.h,6,10); c.fillRect(sx+pl.w-14,pl.y+pl.h,6,10); }
+});
+/* goal flag */
+(function(){ var sx=pfGoalX-pfCam; if(sx<-30||sx>PF_W+30)return;
+c.fillStyle="#374151"; c.fillRect(sx,118,4,112);
+c.fillStyle="#0f766e"; c.beginPath(); c.moveTo(sx+4,118); c.lineTo(sx+38,128); c.lineTo(sx+4,140); c.closePath(); c.fill();
+c.fillStyle="#374151"; c.font="700 10px sans-serif"; c.textAlign="center"; c.fillText("下班",sx+4,112);
+})();
+/* items */
+pfItems.forEach(function(it){
+if(it.taken)return;
+var sx=it.x-pfCam; if(sx<-20||sx>PF_W+20)return;
+var bobY=it.y+Math.sin(pfTick/18+it.ph)*2.5;
+if(it.type==="coffee"){ c.font="19px sans-serif"; c.textAlign="center"; c.fillText("☕",sx,bobY+7); }
+else { c.fillStyle="#f5b921"; c.beginPath(); c.arc(sx,bobY,8,0,Math.PI*2); c.fill(); c.strokeStyle="#b97f06"; c.lineWidth=2; c.stroke(); c.fillStyle="#b97f06"; c.font="800 10px sans-serif"; c.textAlign="center"; c.fillText("¥",sx,bobY+3.5); }
+});
+/* enemies: patrolling bosses */
+pfEnemies.forEach(function(e){
+if(!e.alive)return;
+var sx=e.x-pfCam; if(sx<-40||sx>PF_W+40)return;
+c.fillStyle="#1f2937"; c.fillRect(sx+3,e.y+12,20,20); /* suit */
+c.fillStyle="#f2c094"; c.beginPath(); c.arc(sx+13,e.y+8,8,0,Math.PI*2); c.fill(); /* head */
+c.fillStyle="#111827"; c.fillRect(sx+5,e.y,16,4); /* hair */
+c.fillStyle="#dc2626"; c.fillRect(sx+11,e.y+13,4,10); /* tie */
+c.fillStyle="#111827"; c.fillRect(sx+5,e.y+3,4,2); c.fillRect(sx+17,e.y+3,4,2); /* angry brows */
+});
+/* player: little fish in a bubble */
+(function(){ var p=pfPlayer; if(!p)return; var sx=p.x-pfCam;
+if(p.inv%16>=8)return;
+c.fillStyle="rgba(255,255,255,.35)"; c.beginPath(); c.arc(sx+p.w/2,p.y+p.h/2,19,0,Math.PI*2); c.fill();
+c.strokeStyle="rgba(255,255,255,.8)"; c.lineWidth=1.5; c.stroke();
+c.font="21px sans-serif"; c.textAlign="center";
+c.save(); c.translate(sx+p.w/2,p.y+p.h/2+7); if(p.face<0)c.scale(-1,1); c.fillText("🐟",0,0); c.restore();
+})();
+if((!pfRunning&&!pfOver)||pfPaused){ c.fillStyle="rgba(15,31,24,.45)"; c.fillRect(0,0,PF_W,PF_H); c.fillStyle="#fff"; c.font="700 16px sans-serif"; c.textAlign="center"; c.fillText(pfPaused?"已暂停":"点「开始」出发 →",PF_W/2,PF_H/2); }
+if(pfOver){ c.fillStyle="rgba(255,255,255,.75)"; c.font="700 13px sans-serif"; c.textAlign="center"; }
+}
+function pfLoop(){ if(!pfRunning||pfPaused)return; pfStep(); if(pfRunning)pfDraw(); if(pfRunning)pfRaf=requestAnimationFrame(pfLoop); }
+function pfPauseRun(){ if(pfRunning&&!pfPaused){ pfPaused=true; $("pfPause").textContent="继续"; pfDraw(); } }
+function pfStartGame(){
+pfBuildLevel(); pfResetPlayer();
+pfScoreV=0; pfCoinsV=0; pfLivesV=3; pfRunning=true; pfPaused=false; pfOver=false; pfTick=0;
+pfKeys.left=false; pfKeys.right=false;
+pfHud(); $("pfPause").textContent="暂停"; $("pfMsg").textContent="向右跑！踩老板、捡咖啡，旗子在最右边。";
+cancelAnimationFrame(pfRaf); pfDraw(); pfRaf=requestAnimationFrame(pfLoop);
+}
+$("pfStart").addEventListener("click",pfStartGame);
+$("pfPause").addEventListener("click",function(){ if(!pfRunning)return; pfPaused=!pfPaused; this.textContent=pfPaused?"继续":"暂停"; pfDraw(); if(!pfPaused)pfRaf=requestAnimationFrame(pfLoop); });
+document.querySelectorAll("[data-pf]").forEach(function(b){
+var key=b.getAttribute("data-pf");
+function on(e){ e.preventDefault(); b.classList.add("held"); if(key==="jump")pfJump(); else pfKeys[key]=true; }
+function off(){ b.classList.remove("held"); if(key!=="jump")pfKeys[key]=false; }
+b.addEventListener("pointerdown",on);
+b.addEventListener("pointerup",off);
+b.addEventListener("pointerleave",off);
+b.addEventListener("pointercancel",off);
+b.addEventListener("contextmenu",function(e){e.preventDefault()});
+});
+pfBuildLevel(); pfResetPlayer(); pfHud(); pfDraw();
+
 /* ---- Keyboard for canvas games ---- */
 document.addEventListener("keydown",function(e){
 if($("bossView").classList.contains("open"))return;
@@ -957,30 +1178,58 @@ var m2={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right"};
 if(m2[k]){ e.preventDefault(); gMove(m2[k]); }
 }else if(activeGame==="breakout"){
 if(k==="ArrowLeft"){brKeys.left=true;e.preventDefault()} else if(k==="ArrowRight"){brKeys.right=true;e.preventDefault()}
+}else if(activeGame==="platform"){
+if(k==="ArrowLeft"||k==="a"||k==="A"){pfKeys.left=true;e.preventDefault()}
+else if(k==="ArrowRight"||k==="d"||k==="D"){pfKeys.right=true;e.preventDefault()}
+else if(k==="ArrowUp"||k==="w"||k==="W"||k===" "){e.preventDefault();if(!e.repeat)pfJump()}
 }
 });
-document.addEventListener("keyup",function(e){ if(e.key==="ArrowLeft")brKeys.left=false; if(e.key==="ArrowRight")brKeys.right=false; });
+document.addEventListener("keyup",function(e){
+if(e.key==="ArrowLeft"){brKeys.left=false;pfKeys.left=false}
+if(e.key==="ArrowRight"){brKeys.right=false;pfKeys.right=false}
+if(e.key==="a"||e.key==="A")pfKeys.left=false;
+if(e.key==="d"||e.key==="D")pfKeys.right=false;
+});
 
-/* ---- Sticky nav scrollspy + back to top ---- */
-var NAV_SECS=["draw","library","combo","games"];
-var navLinks={};
-document.querySelectorAll("[data-nav]").forEach(function(a){navLinks[a.getAttribute("data-nav")]=a});
-function navSpy(){
-var current=NAV_SECS[0];
-for(var i=0;i<NAV_SECS.length;i++){
-var el=document.getElementById(NAV_SECS[i]);
-if(el&&el.getBoundingClientRect().top<=90)current=NAV_SECS[i];
+/* ---- Page router: each nav item is its own view ---- */
+var PAGES=["draw","library","combo","games"];
+var currentPage="draw";
+var pageViews={};
+document.querySelectorAll(".page-view").forEach(function(v){pageViews[v.getAttribute("data-page")]=v});
+function pauseAllGames(){
+if(typeof snakePauseRun==="function")snakePauseRun();
+if(typeof tetPauseRun==="function")tetPauseRun();
+if(typeof brPauseRun==="function")brPauseRun();
+if(typeof pfPauseRun==="function")pfPauseRun();
 }
-NAV_SECS.forEach(function(id){if(navLinks[id])navLinks[id].classList.toggle("active",id===current)});
-$("topBtn").hidden=window.scrollY<600;
+function showPage(id){
+if(PAGES.indexOf(id)<0)id="draw";
+if(id!=="games")pauseAllGames();
+currentPage=id;
+PAGES.forEach(function(p){if(pageViews[p])pageViews[p].hidden=p!==id});
+document.querySelectorAll("[data-nav]").forEach(function(a){a.classList.toggle("active",a.getAttribute("data-nav")===id)});
+window.scrollTo({top:0,behavior:"instant"});
+$("topBtn").hidden=true;
 }
-window.addEventListener("scroll",navSpy,{passive:true});
-navSpy();
+function pageFromHash(){
+var h=(location.hash||"").replace("#","");
+return PAGES.indexOf(h)>=0?h:null;
+}
+document.querySelectorAll("[data-nav]").forEach(function(a){
+a.addEventListener("click",function(e){
+e.preventDefault();
+var id=a.getAttribute("data-nav");
+if(location.hash==="#"+id){showPage(id)}else{location.hash=id}
+});
+});
+window.addEventListener("hashchange",function(){var p=pageFromHash();if(p)showPage(p)});
+showPage(pageFromHash()||"draw");
+window.addEventListener("scroll",function(){$("topBtn").hidden=window.scrollY<600},{passive:true});
 $("topBtn").addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});
 
 /* ---- Boss key ---- */
 var boss=$("bossView");
-function openBoss(){ if(typeof snakePauseRun==="function")snakePauseRun(); if(typeof tetPauseRun==="function")tetPauseRun(); if(typeof brPauseRun==="function")brPauseRun(); boss.classList.add("open")}
+function openBoss(){ if(typeof snakePauseRun==="function")snakePauseRun(); if(typeof tetPauseRun==="function")tetPauseRun(); if(typeof brPauseRun==="function")brPauseRun(); if(typeof pfPauseRun==="function")pfPauseRun(); boss.classList.add("open")}
 function closeBoss(){boss.classList.remove("open")}
 $("bossBtn").addEventListener("click",openBoss);
 $("bossExit").addEventListener("click",closeBoss);
