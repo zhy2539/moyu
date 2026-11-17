@@ -24,15 +24,22 @@ button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]
 button{font:inherit;cursor:pointer}
 a{color:var(--accent)}
 .wrap{max-width:920px;margin:0 auto;padding:8px 20px 96px}
-#draw,#library,#combo,#games{scroll-margin-top:68px}
-.topnav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
-.topnav-inner{max-width:920px;margin:0 auto;padding:0 20px;display:flex;gap:4px;align-items:center;height:52px}
-.topnav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;padding:7px 12px;border-radius:999px;min-height:36px;display:inline-flex;align-items:center;white-space:nowrap}
-.topnav a:hover{color:var(--ink)}
-.topnav a.active{background:var(--ink);color:var(--bg)}
+#draw,#library,#combo,#games{scroll-margin-top:28px}
+/* Sidebar nav */
+body{padding-left:212px}
+.sidenav{position:fixed;left:0;top:0;bottom:0;width:212px;z-index:50;background:var(--bg);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:30px 18px;gap:4px}
+.sidenav .nav-label{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin:0 10px 14px}
+.sidenav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600;padding:11px 14px;border-radius:10px;min-height:44px;display:flex;align-items:center;white-space:nowrap}
+.sidenav a:hover{color:var(--ink);background:var(--surface2)}
+.sidenav a.active{background:var(--ink);color:var(--bg)}
 #topBtn{position:fixed;right:16px;bottom:84px;z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.10);padding:0;line-height:1}
 #topBtn[hidden]{display:none}
-@media (max-width:560px){.topnav-inner{padding:0 10px;gap:2px}.topnav a{padding:7px 9px;font-size:13px}}
+@media (max-width:900px){
+body{padding-left:54px}
+.sidenav{width:54px;padding:22px 6px;align-items:center}
+.sidenav .nav-label{display:none}
+.sidenav a{writing-mode:vertical-rl;padding:14px 9px;font-size:13px;letter-spacing:.2em;min-height:0;border-radius:8px}
+}
 /* Hero */
 .hero{padding:38px 0 4px}
 .hero h1{font-family:"Noto Serif SC",serif;font-size:clamp(28px,5vw,38px);line-height:1.25;margin:0 0 12px;font-weight:700;letter-spacing:.01em}
@@ -153,12 +160,13 @@ footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="页面导航"><div class="topnav-inner">
+<nav class="sidenav" aria-label="页面导航">
+<p class="nav-label">本页目录</p>
 <a href="#draw" data-nav="draw">随便抽</a>
 <a href="#library" data-nav="library">点子库</a>
 <a href="#combo" data-nav="combo">今日套餐</a>
 <a href="#games" data-nav="games">小游戏</a>
-</div></nav>
+</nav>
 <div class="wrap">
 
 <header class="hero">
