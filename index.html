@@ -10,12 +10,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{
---bg:#f4f6f1; --surface:#ffffff; --surface2:#eef3ec; --ink:#1a2a22; --muted:#5c6f63;
---line:#d9e2d6; --accent:#0f766e; --accent-ink:#ffffff; --coral:#e85d3f; --amber:#d97706;
---chip:#e6efe7; --shadow:0 10px 30px rgba(20,50,35,.08); --radius:18px;
+--bg:#fafaf8; --surface:#ffffff; --surface2:#f2f3f0; --ink:#20241f; --muted:#6f766e;
+--line:#e4e6e1; --accent:#0f766e; --accent-ink:#ffffff; --coral:#0f766e; --amber:#8a9187;
+--chip:#eef0ec; --shadow:none; --radius:12px;
 }
 @media (prefers-color-scheme: dark){
-:root{ --bg:#101613; --surface:#18201b; --surface2:#1f2a22; --ink:#e8f0e9; --muted:#9db0a2; --line:#2c3a30; --accent:#2dd4bf; --accent-ink:#06201c; --coral:#ff8a6b; --amber:#fbbf24; --chip:#243329; --shadow:0 10px 30px rgba(0,0,0,.35);}
+:root{ --bg:#131514; --surface:#1b1e1c; --surface2:#242825; --ink:#ebedeb; --muted:#9aa198; --line:#2f332f; --accent:#45b8a6; --accent-ink:#0b2420; --coral:#45b8a6; --amber:#8f968e; --chip:#262a27; --shadow:none;}
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -23,42 +23,49 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC",s
 button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
 button{font:inherit;cursor:pointer}
 a{color:var(--accent)}
-.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 90px}
+.wrap{max-width:920px;margin:0 auto;padding:8px 20px 96px}
+#draw,#library,#combo,#games{scroll-margin-top:68px}
+.topnav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.topnav-inner{max-width:920px;margin:0 auto;padding:0 20px;display:flex;gap:4px;align-items:center;height:52px}
+.topnav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;padding:7px 12px;border-radius:999px;min-height:36px;display:inline-flex;align-items:center;white-space:nowrap}
+.topnav a:hover{color:var(--ink)}
+.topnav a.active{background:var(--ink);color:var(--bg)}
+#topBtn{position:fixed;right:16px;bottom:84px;z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.10);padding:0;line-height:1}
+#topBtn[hidden]{display:none}
+@media (max-width:560px){.topnav-inner{padding:0 10px;gap:2px}.topnav a{padding:7px 9px;font-size:13px}}
 /* Hero */
-.hero{padding:28px 0 8px}
-.hero h1{font-family:"Noto Serif SC",serif;font-size:clamp(30px,6vw,52px);line-height:1.15;margin:0 0 12px;font-weight:900;letter-spacing:.01em}
+.hero{padding:38px 0 4px}
+.hero h1{font-family:"Noto Serif SC",serif;font-size:clamp(28px,5vw,38px);line-height:1.25;margin:0 0 12px;font-weight:700;letter-spacing:.01em}
 .hero h1 em{font-style:normal;color:var(--coral)}
-.hero p{color:var(--muted);font-size:17px;max-width:640px;margin:0}
+.hero p{color:var(--muted);font-size:16px;max-width:600px;margin:0}
 .hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.hero-meta span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500}
+.hero-meta span{background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--muted)}
 /* Random draw */
-.draw{background:var(--ink);color:var(--bg);border-radius:22px;padding:22px;margin:26px 0 8px;position:relative;overflow:hidden}
-@media (prefers-color-scheme: dark){.draw{background:#e8f0e9;color:#14231a}}
-.draw-label{font-size:13px;font-weight:700;letter-spacing:.12em;opacity:.7;margin:0 0 8px}
-.draw-title{font-family:"Noto Serif SC",serif;font-size:clamp(22px,4vw,32px);font-weight:900;margin:0 0 6px;line-height:1.3}
-.draw-desc{margin:0 0 16px;opacity:.85;max-width:560px}
+.draw{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin:30px 0 8px}
+.draw-label{font-size:13px;font-weight:600;letter-spacing:.08em;color:var(--muted);margin:0 0 8px}
+.draw-title{font-family:"Noto Serif SC",serif;font-size:clamp(20px,3.5vw,26px);font-weight:700;margin:0 0 6px;line-height:1.35}
+.draw-desc{margin:0 0 18px;color:var(--muted);max-width:560px}
 .draw-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .btn{border:0;border-radius:999px;padding:10px 20px;font-weight:700;font-size:15px;display:inline-flex;align-items:center;gap:8px;justify-content:center}
-.btn-primary{background:var(--coral);color:#fff}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
 .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
 .btn-accent{background:var(--accent);color:var(--accent-ink)}
-.draw .btn-ghost{border-color:#e8f0e9;color:#e8f0e9;background:rgba(255,255,255,.06)}
-@media (prefers-color-scheme: dark){.draw .btn-ghost{border-color:#14231a;color:#14231a;background:rgba(0,0,0,.05)}}
-.draw-tags{font-size:13px;opacity:.75}
+.draw .btn-ghost{border-color:var(--line);color:var(--ink);background:transparent}
+.draw-tags{font-size:13px;color:var(--muted)}
 /* Sections */
-h2.sec{font-family:"Noto Serif SC",serif;font-size:26px;margin:40px 0 6px}
+h2.sec{font-family:"Noto Serif SC",serif;font-size:23px;font-weight:700;margin:64px 0 6px;padding-top:30px;border-top:1px solid var(--line)}
 .sec-sub{color:var(--muted);margin:0 0 16px;font-size:15px}
 /* Filters */
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.chip-btn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font-weight:600;font-size:14px;min-height:40px}
+.chip-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font-weight:600;font-size:14px;min-height:40px}
 .chip-btn.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .filter-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0 18px}
 .filter-row label{font-size:14px;color:var(--muted);font-weight:600}
 .filter-row select{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 10px;font:inherit;font-size:14px;min-height:40px}
 .count-note{font-size:13px;color:var(--muted)}
 /* Idea grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .cat{font-size:12px;font-weight:700;letter-spacing:.06em;background:var(--chip);border-radius:999px;padding:3px 10px;white-space:nowrap}
 .card h3{font-size:17px;margin:0;line-height:1.4}
@@ -71,13 +78,13 @@ h2.sec{font-family:"Noto Serif SC",serif;font-size:26px;margin:40px 0 6px}
 .empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);padding:28px;text-align:center;color:var(--muted)}
 /* Combo */
 .combo{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.combo-step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.combo-step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
 .combo-step .when{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--coral)}
 .combo-step h3{margin:6px 0 4px;font-size:16px}
 .combo-step p{margin:0;color:var(--muted);font-size:14px}
 /* Games */
 .game-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.game-panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.game-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
 .game-panel h3{margin:0 0 4px;font-size:20px}
 .game-panel .how{color:var(--muted);font-size:14px;margin:0 0 16px}
 .stat-row{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;margin:12px 0}
@@ -127,7 +134,7 @@ h2.sec{font-family:"Noto Serif SC",serif;font-size:26px;margin:40px 0 6px}
 .g2048-cell.v2{background:#e6efe7}.g2048-cell.v4{background:#cfe3d3}.g2048-cell.v8{background:#f2b879;color:#fff}.g2048-cell.v16{background:#f08a4b;color:#fff}.g2048-cell.v32{background:#e85d3f;color:#fff}.g2048-cell.v64{background:#d6452a;color:#fff}.g2048-cell.v128{background:#e9c46a;color:#3a2e00;font-size:19px}.g2048-cell.v256{background:#e9b949;color:#3a2e00;font-size:19px}.g2048-cell.v512{background:#2a9d8f;color:#fff;font-size:19px}.g2048-cell.v1024{background:#0f766e;color:#fff;font-size:16px}.g2048-cell.v2048{background:#111827;color:#fbbf24;font-size:16px}
 @media (prefers-color-scheme: dark){.g2048-cell.v2{background:#243329}.g2048-cell.v4{background:#2f4a38}}
 /* boss mode */
-#bossBtn{position:fixed;right:16px;bottom:16px;z-index:60;background:var(--coral);color:#fff;border:0;border-radius:999px;padding:14px 22px;font-weight:900;font-size:16px;box-shadow:0 12px 28px rgba(0,0,0,.28);min-height:52px}
+#bossBtn{position:fixed;right:16px;bottom:16px;z-index:60;background:var(--coral);color:#fff;border:0;border-radius:999px;padding:14px 22px;font-weight:700;font-size:15px;box-shadow:0 6px 18px rgba(0,0,0,.16);min-height:52px}
 #bossView{display:none;position:fixed;inset:0;z-index:100;background:#f3f4f6;color:#111827;overflow:auto;padding:24px 16px 60px;font-family:Arial,sans-serif}
 #bossView.open{display:block}
 #bossView.sheet{max-width:900px;margin:0 auto;background:#fff;border:1px solid #d1d5db;padding:24px}
@@ -140,12 +147,18 @@ h2.sec{font-family:"Noto Serif SC",serif;font-size:26px;margin:40px 0 6px}
 #bossExit{margin-top:18px;background:#111827;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-weight:700;min-height:44px}
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:80;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
+footer{margin-top:64px;color:var(--muted);font-size:13px;text-align:center}
 @media (max-width:560px){.grid{grid-template-columns:1fr}.wrap{padding-bottom:100px}}
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important}}
 </style>
 </head>
 <body>
+<nav class="topnav" aria-label="页面导航"><div class="topnav-inner">
+<a href="#draw" data-nav="draw">随便抽</a>
+<a href="#library" data-nav="library">点子库</a>
+<a href="#combo" data-nav="combo">今日套餐</a>
+<a href="#games" data-nav="games">小游戏</a>
+</div></nav>
 <div class="wrap">
 
 <header class="hero">
@@ -159,7 +172,7 @@ footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
 </header>
 
 <!-- Random draw -->
-<section class="draw" aria-label="随机抽一个点子">
+<section class="draw" id="draw" aria-label="随机抽一个点子">
 <p class="draw-label">不知道干啥？抽一个</p>
 <h2 class="draw-title" id="drawTitle">点下面的按钮，今天的摸鱼安排交给运气</h2>
 <p class="draw-desc" id="drawDesc">可以按时长抽：只有 5 分钟就抽短的，有一整段午休就抽长的。</p>
@@ -197,9 +210,9 @@ footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
 <div class="empty" id="ideaEmpty" hidden>这个组合下没有点子，换个筛选试试，或者点上面「随便来一个」。</div>
 
 <!-- Daily combo -->
-<h2 class="sec">今日摸鱼套餐</h2>
+<h2 class="sec" id="combo">今日摸鱼套餐</h2>
 <p class="sec-sub">一整天怎么安排？给你配好了一套节奏，点任意一步就跳到对应点子。</p>
-<div class="combo" id="combo"></div>
+<div class="combo" id="comboGrid"></div>
 
 <!-- Games -->
 <h2 class="sec" id="games">摸鱼小游戏</h2>
@@ -367,6 +380,7 @@ footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
 <footer>摸鱼有度，活儿别耽误。喘口气是为了更好地干活 🐟</footer>
 </div>
 
+<button id="topBtn" aria-label="回到顶部" hidden>↑</button>
 <button id="bossBtn" aria-label="老板键：切换到工作界面">🚨 老板来了！</button>
 
 <!-- Boss view -->
@@ -509,7 +523,7 @@ var comboData=[
 {when:"午后 · 困意来袭",pick:2},
 {when:"傍晚 · 收尾之前",pick:26}
 ];
-var comboWrap=$("combo");
+var comboWrap=$("comboGrid");
 comboData.forEach(function(c){
 var it=IDEAS.filter(function(x){return x.id===c.pick})[0];
 var d=document.createElement("div");d.className="combo-step";
@@ -938,6 +952,23 @@ if(k==="ArrowLeft"){brKeys.left=true;e.preventDefault()} else if(k==="ArrowRight
 }
 });
 document.addEventListener("keyup",function(e){ if(e.key==="ArrowLeft")brKeys.left=false; if(e.key==="ArrowRight")brKeys.right=false; });
+
+/* ---- Sticky nav scrollspy + back to top ---- */
+var NAV_SECS=["draw","library","combo","games"];
+var navLinks={};
+document.querySelectorAll("[data-nav]").forEach(function(a){navLinks[a.getAttribute("data-nav")]=a});
+function navSpy(){
+var current=NAV_SECS[0];
+for(var i=0;i<NAV_SECS.length;i++){
+var el=document.getElementById(NAV_SECS[i]);
+if(el&&el.getBoundingClientRect().top<=90)current=NAV_SECS[i];
+}
+NAV_SECS.forEach(function(id){if(navLinks[id])navLinks[id].classList.toggle("active",id===current)});
+$("topBtn").hidden=window.scrollY<600;
+}
+window.addEventListener("scroll",navSpy,{passive:true});
+navSpy();
+$("topBtn").addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});
 
 /* ---- Boss key ---- */
 var boss=$("bossView");
